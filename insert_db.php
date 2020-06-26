@@ -31,7 +31,6 @@ function deleteall() //全削除
   // 接続を閉じる
   $dbh = null;
 }
-
 function addstock($name, $amount) //追加
 {
   try {
@@ -47,7 +46,6 @@ function addstock($name, $amount) //追加
 
   // SQL作成
   $sql = "INSERT INTO `management` (`id`, `name`, `amount`) VALUES (NULL, '$name', $amount)";
-  $amount = 1; //デフォルト値(入力がなかった場合を1
 
   // SQL実行
   $res = $dbh->query($sql);
@@ -62,9 +60,20 @@ function addstock($name, $amount) //追加
   $dbh = null;
 }
 
-if($_GET['function'] == 'deleteall'){
-  deleteall();
-}else if($_GET['function'] == 'addstock'){
-  addstock($_GET['name'], $_GET['amount']);
-}
+switch ($_GET['function']) { //functionの中身によって処理を変える
+  case 'deleteall': //deleteallの場合
+    deleteall();
+    break;
+  case 'addstock': //addstockの場合
+    if ($_GET['amount'] != null) { //amountがあるときは
+      if (preg_match('/^[0-9]+$/', $_GET['amount'])) { //amountが整数であれば
+        addstock($_GET['name'], $_GET['amount']);
+      } else {  //amountが整数以外であれば
+        echo "ERROR"; //ERRORを出力
+      }
+    } else { //amountが無いときは
+      addstock($_GET['name'], "1"); //amountに1をいれる(デフォルト値)
+    }
 
+    break;
+}
