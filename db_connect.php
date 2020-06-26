@@ -1,5 +1,6 @@
 <?php
 
+// DB情報
 $host = 'localhost';
 $username = 'root';
 $passwd = 'Hogehoge@1234';
